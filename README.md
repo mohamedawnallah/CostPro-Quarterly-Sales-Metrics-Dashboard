@@ -9,14 +9,14 @@ It is built using Python, Pandas, Numpy, Streamlit and Plotly.
 
 To install the required packages, run the following command:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
 To run the dashboard locally, clone the repo and run this command:
 
-    ```bash
-    streamlit run streamlit_app.py
-    ```
+```bash
+streamlit run streamlit_app.py
+```
