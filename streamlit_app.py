@@ -24,11 +24,6 @@ quarter = st.selectbox("Select quarter:", df["Quarter"].unique())
 # Filter the data for the selected quarter
 filtered_df = filter_by_year_and_quarter(df, year, quarter)
 
-# Filter the data for the previous quarter needed for customer retention
-previous_quarter = quarter - 1 if quarter > 1 else 4
-previous_year = year if quarter > 1 else year - 1
-filtered_df_previous_quarter = df[(df['Year'] == previous_year) & (df['Quarter'] == previous_quarter)]
-
 # SUMMARIZE THE DATA
 # Display the total sales for the selected quarter
 st.metric(f"Q{quarter} Total sales", f"${total_sales(filtered_df)}", delta=None, delta_color="normal", help=None, label_visibility="visible")
@@ -54,12 +49,7 @@ st.metric(f"Q{quarter} Most Profitable Product", f"{most_profitable_product(filt
 
 # CUSTOM METRICS
 # Display the customer retention rate for the selected quarter
-customer_retention_rate_result = customer_retention_rate(filtered_df, filtered_df_previous_quarter)
-if not customer_retention_rate_result:
-    customer_retention_rate_result = f"No retention rate for Q{quarter} {year}."
-else:
-    customer_retention_rate_result = f"{customer_retention_rate_result}%"
-st.metric(f"Q{quarter} Customer retention rate", customer_retention_rate_result, delta=None, delta_color="normal", help=None, label_visibility="visible")
+st.metric(f"Q{quarter} Customer retention rate", customer_retention_rate(filtered_df), delta=None, delta_color="normal", help=None, label_visibility="visible")
 
 # YOUR CUSTOM METRIC HERE
 
