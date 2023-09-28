@@ -1,14 +1,18 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from src.filter_by_year_and_quarter import *
-from src.total_sales import *
-from src.mean_customers_per_day import *
-from src.median_order_value import *
-from src.most_popular_product import *
-from src.most_profitable_product import *
-from src.customer_retention_rate import *
-from src.order_value_variability import *
+from src.filter_by_year_and_quarter import filter_by_year_and_quarter
+from src.total_sales import total_sales
+from src.mean_customers_per_day import mean_customers_per_day
+from src.median_order_value import median_order_value
+from src.most_popular_product import most_popular_product
+from src.most_profitable_product import most_profitable_product
+from src.customer_retention_rate import customer_retention_rate
+from src.order_value_variability import order_value_variability
+from src.customer_purchase_proba import customer_purchase_proba
+from src.customer_arrival_proba import customer_arrival_proba
+from src.plot_customer_purchase_proba import plot_customer_purchase_proba
+from src.plot_customer_arrival_proba import plot_customer_arrival_proba
 
 # Display title and text
 st.title("CostPro Quarterly Sales Metrics")
@@ -23,6 +27,9 @@ quarter = st.selectbox("Select quarter:", df["Quarter"].unique())
 
 # Filter the data for the selected quarter
 filtered_df = filter_by_year_and_quarter(df, year, quarter)
+
+customer_purchase_binomial_dist = customer_purchase_proba(filtered_df)
+customer_arrival_poisson_dist = customer_arrival_proba(filtered_df)
 
 # SUMMARIZE THE DATA
 # Display the total sales for the selected quarter
@@ -56,7 +63,15 @@ st.metric(f"Q{quarter} Customer retention rate", customer_retention_rate(filtere
 # VISUALIZE THE DATA
 # Create a scatterplot of unit prices for the selected quarter
 st.subheader(f"Q{quarter} Unit Price Distribution")
-fig = px.scatter(filtered_df, x="UnitPrice", color="UnitPrice")
-st.plotly_chart(fig)
+unit_price_dist_fig = px.scatter(filtered_df, x="UnitPrice", color="UnitPrice")
+st.plotly_chart(unit_price_dist_fig)
 
 # YOUR CUSTOM VIZ HERE
+st.subheader(f"Q{quarter} Customer Purchase Probability")
+customer_purchase_proba_fig = plot_customer_purchase_proba(customer_purchase_binomial_dist)
+st.plotly_chart(customer_purchase_proba_fig)
+
+
+st.subheader(f"Q{quarter} Customer Arrival Probability")
+customer_arrival_proba_fig = plot_customer_arrival_proba(customer_arrival_poisson_dist)
+st.plotly_chart(customer_arrival_proba_fig)

@@ -1,5 +1,5 @@
 import pandas as pd
-from src.filter_by_year_and_quarter import *
+from src.filter_by_year_and_quarter import filter_by_year_and_quarter
 
 def test_filter_by_year_and_quarter(data: pd.DataFrame) -> float:
     year, quarter = 2022, 4
