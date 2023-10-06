@@ -10,6 +10,6 @@ def customer_arrival_proba(data: pd.DataFrame) -> float:
     :param quarter: The quarter to calculate the probability for
     :return: The probability of a customer arriving on the website in the next 15 minutes
     """
-    mu = data.groupby(['Year', 'Month', 'Day']).agg(TotalCustomers=('CustomerID', 'nunique')).mean()[0]
-    dist = poisson(mu=mu)
+    avg_customers = int(data.groupby(['Year', 'Month', 'Day'])['CustomerID'].nunique().mean())
+    dist = poisson(mu=avg_customers)
     return dist

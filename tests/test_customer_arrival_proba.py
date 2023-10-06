@@ -6,6 +6,7 @@ def test_customer_arrival_proba(data: pd.DataFrame) -> float:
     year, quarter = 2022, 4
     filtered_data = filter_by_year_and_quarter(data, year, quarter)
     dist = customer_arrival_proba(filtered_data)
-    k = len(filtered_data['CustomerID'].unique()) * 1.1
-    probability = dist.pmf(k)
-    assert probability == 0.0, 'There should be no customers for 2022 Q4'
+    avg_customers = filtered_data.groupby(['Year', 'Month', 'Day'])['CustomerID'].nunique().mean()
+    k = int(avg_customers * 1.1)
+    probability = round(dist.pmf(k),2)
+    assert probability == 0.03, 'There should be 3% for 10% more than average customers per day for 2022 Q4'
